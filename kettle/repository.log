@@ -1,0 +1,10 @@
+Creating database: simtrade2
+Save repository element : simtrade2 : Creation of initial version
+Creating database: simtrade2_staging
+Save repository element : simtrade2_staging : Creation of initial version
+Creating database: simtrade2_cube
+Save repository element : simtrade2_cube : Creation of initial version
+Updating database connection   {0} 
+Save repository element : simtrade2 : Modification by user
+Creating database: schulten_performance_hive
+Save repository element : schulten_performance_hive : Creation of initial version
