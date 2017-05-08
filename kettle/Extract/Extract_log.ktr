@@ -1,6 +1,6 @@
 <transformation>
   <info>
-    <name>Extract_simulation2</name>
+    <name>Extract_log</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -8,11 +8,6 @@
     <trans_status>0</trans_status>
     <directory>&#x2f;Extract</directory>
     <parameters>
-      <parameter>
-        <name>system</name>
-        <default_value>1</default_value>
-        <description/>
-      </parameter>
     </parameters>
     <log>
       <trans-log-table>
@@ -432,68 +427,14 @@
     <clusterschemas>
     </clusterschemas>
     <created_user>-</created_user>
-    <created_date>2017&#x2f;04&#x2f;24 12&#x3a;53&#x3a;05.729</created_date>
+    <created_date>2017&#x2f;05&#x2f;02 19&#x3a;44&#x3a;53.622</created_date>
     <modified_user>-</modified_user>
-    <modified_date>2017&#x2f;05&#x2f;03 14&#x3a;00&#x3a;12.881</modified_date>
+    <modified_date>2017&#x2f;05&#x2f;03 13&#x3a;44&#x3a;17.601</modified_date>
     <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA&#x3d;</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
   </notepads>
-  <connection>
-    <name>log_db</name>
-    <server>localhost</server>
-    <type>MYSQL</type>
-    <access>Native</access>
-    <database>log_db</database>
-    <port>3306</port>
-    <username>simtrade</username>
-    <password>Encrypted 2be98afc86aa7f2e4b810a364cc93abdf</password>
-    <servername/>
-    <data_tablespace/>
-    <index_tablespace/>
-    <attributes>
-      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
-      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
-      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
-      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
-      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
-      <attribute><code>PORT_NUMBER</code><attribute>3306</attribute></attribute>
-      <attribute><code>PRESERVE_RESERVED_WORD_CASE</code><attribute>Y</attribute></attribute>
-      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
-      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
-      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>Y</attribute></attribute>
-      <attribute><code>SUPPORTS_TIMESTAMP_DATA_TYPE</code><attribute>Y</attribute></attribute>
-      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
-    </attributes>
-  </connection>
-  <connection>
-    <name>simtrade2</name>
-    <server>localhost</server>
-    <type>MYSQL</type>
-    <access>Native</access>
-    <database>simtrade2</database>
-    <port>3306</port>
-    <username>simtrade</username>
-    <password>Encrypted 2be98afc86aa7f2e4b810a364cc93abdf</password>
-    <servername/>
-    <data_tablespace/>
-    <index_tablespace/>
-    <attributes>
-      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
-      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
-      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
-      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
-      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
-      <attribute><code>PORT_NUMBER</code><attribute>3306</attribute></attribute>
-      <attribute><code>PRESERVE_RESERVED_WORD_CASE</code><attribute>Y</attribute></attribute>
-      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
-      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
-      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>Y</attribute></attribute>
-      <attribute><code>SUPPORTS_TIMESTAMP_DATA_TYPE</code><attribute>Y</attribute></attribute>
-      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
-    </attributes>
-  </connection>
   <connection>
     <name>simtrade2_staging</name>
     <server>localhost</server>
@@ -523,89 +464,84 @@
   </connection>
   <order>
     <hop>
-      <from>Get Transformation Name</from>
-      <to>Read Last Exec Time</to>
+      <from>Table input</from>
+      <to>Add constants</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Get system</from>
-      <to>Table output</to>
+      <from>Add constants</from>
+      <to>Calculator</to>
+      <enabled>N</enabled>
+    </hop>
+    <hop>
+      <from>Calculator</from>
+      <to>File exists</to>
+      <enabled>N</enabled>
+    </hop>
+    <hop>
+      <from>Text file input</from>
+      <to>Split Fields</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>If lastend is null </from>
-      <to>Table input simulation</to>
+      <from>File exists</from>
+      <to>Filter rows</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Table input simulation</from>
-      <to>Get system</to>
+      <from>Filter rows</from>
+      <to>Text file input</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Table output</from>
-      <to>Blocking Step</to>
+      <from>Split Fields</from>
+      <to>Switch &#x2f; Case</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Read Last Exec Time</from>
-      <to>If lastend is null </to>
+      <from>Switch &#x2f; Case</from>
+      <to>Add Produktgruppe</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Get Variables</from>
-      <to>Table output 2</to>
+      <from>Add Produktgruppe</from>
+      <to>Produkte output</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Blocking Step</from>
-      <to>Get System Info</to>
+      <from>Switch &#x2f; Case</from>
+      <to>Kurs Event output</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Get System Info</from>
-      <to>Get Variables</to>
+      <from>Switch &#x2f; Case</from>
+      <to>User Event output</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Table output</from>
-      <to>Table output 3</to>
+      <from>Switch &#x2f; Case</from>
+      <to>Set field value to a constant</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Set field value to a constant</from>
+      <to>Value Mapper</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Add constants</from>
+      <to>Concat Fields</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Concat Fields</from>
+      <to>File exists</to>
       <enabled>Y</enabled>
     </hop>
   </order>
   <step>
-    <name>Blocking Step</name>
-    <type>BlockingStep</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-      <pass_all_rows>N</pass_all_rows>
-      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
-      <prefix>block</prefix>
-      <cache_size>5000</cache_size>
-      <compress>Y</compress>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>912</xloc>
-      <yloc>304</yloc>
-      <draw>Y</draw>
-    </GUI>
-    </step>
-
-  <step>
-    <name>Get System Info</name>
-    <type>SystemInfo</type>
+    <name>Add Produktgruppe</name>
+    <type>Constant</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -616,82 +552,16 @@
     </partitioning>
     <fields>
       <field>
-        <name>lastrun</name>
-        <type>system date &#x28;fixed&#x29;</type>
-        </field>
-      <field>
-        <name>transfm</name>
-        <type>transformation name</type>
-        </field>
-      </fields>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>912</xloc>
-      <yloc>160</yloc>
-      <draw>Y</draw>
-    </GUI>
-    </step>
-
-  <step>
-    <name>Get Transformation Name</name>
-    <type>SystemInfo</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <name>transfm</name>
-        <type>transformation name</type>
-        </field>
-      </fields>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>320</xloc>
-      <yloc>176</yloc>
-      <draw>Y</draw>
-    </GUI>
-    </step>
-
-  <step>
-    <name>Get Variables</name>
-    <type>GetVariable</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <name>system</name>
-        <variable>&#x24;&#x7b;system&#x7d;</variable>
+        <name>gruppe</name>
         <type>String</type>
         <format/>
         <currency/>
         <decimal/>
         <group/>
+        <nullif>Edelmetalle</nullif>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>none</trim_type>
+        <set_empty_string>N</set_empty_string>
       </field>
     </fields>
     <cluster_schema/>
@@ -702,17 +572,17 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1008</xloc>
-      <yloc>160</yloc>
+      <xloc>496</xloc>
+      <yloc>432</yloc>
       <draw>Y</draw>
     </GUI>
     </step>
 
   <step>
-    <name>Get system</name>
-    <type>GetVariable</type>
+    <name>Add constants</name>
+    <type>Constant</type>
     <description/>
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <custom_distribution/>
     <copies>1</copies>
     <partitioning>
@@ -721,16 +591,16 @@
     </partitioning>
     <fields>
       <field>
-        <name>system</name>
-        <variable>&#x24;&#x7b;system&#x7d;</variable>
+        <name>path</name>
         <type>String</type>
         <format/>
         <currency/>
         <decimal/>
         <group/>
+        <nullif>C&#x3a;&#x5c;Users&#x5c;Niklas&#x5c;Desktop&#x5c;4.Semester&#x5c;DWH&#x5c;logs&#x5c;trace</nullif>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>none</trim_type>
+        <set_empty_string>N</set_empty_string>
       </field>
     </fields>
     <cluster_schema/>
@@ -741,15 +611,15 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>736</xloc>
-      <yloc>448</yloc>
+      <xloc>304</xloc>
+      <yloc>112</yloc>
       <draw>Y</draw>
     </GUI>
     </step>
 
   <step>
-    <name>If lastend is null </name>
-    <type>IfNull</type>
+    <name>Calculator</name>
+    <type>Calculator</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -758,17 +628,262 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-      <replaceAllByValue/>
-      <replaceAllMask/>
-      <selectFields>Y</selectFields>
-      <selectValuesType>N</selectValuesType>
-      <setEmptyStringAll>N</setEmptyStringAll>
-    <valuetypes>
-      </valuetypes>
+    <calculation>
+      <field_name>log</field_name>
+      <calc_type>-</calc_type>
+      <field_a>logfile</field_a>
+      <field_b/>
+      <field_c/>
+      <value_type>String</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <remove>N</remove>
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
+      <currency_symbol/>
+    </calculation>
+    <calculation>
+      <field_name>logzeile</field_name>
+      <calc_type>ADD</calc_type>
+      <field_a>path</field_a>
+      <field_b>logfile</field_b>
+      <field_c/>
+      <value_type>String</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <remove>N</remove>
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
+      <currency_symbol/>
+    </calculation>
+    <calculation>
+      <field_name>path</field_name>
+      <calc_type>-</calc_type>
+      <field_a>path</field_a>
+      <field_b/>
+      <field_c/>
+      <value_type>String</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <remove>N</remove>
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
+      <currency_symbol/>
+    </calculation>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>80</xloc>
+      <yloc>192</yloc>
+      <draw>Y</draw>
+    </GUI>
+    </step>
+
+  <step>
+    <name>File exists</name>
+    <type>FileExists</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <filenamefield>logaddresse</filenamefield>
+    <resultfieldname>result</resultfieldname>
+    <includefiletype>N</includefiletype>
+    <filetypefieldname/>
+    <addresultfilenames>N</addresultfilenames>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>240</xloc>
+      <yloc>192</yloc>
+      <draw>Y</draw>
+    </GUI>
+    </step>
+
+  <step>
+    <name>Filter rows</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+<send_true_to>Text file input</send_true_to>
+<send_false_to/>
+    <compare>
+<condition>
+ <negated>N</negated>
+ <leftvalue>result</leftvalue>
+ <function>&#x3d;</function>
+ <rightvalue/>
+ <value><name>constant</name><type>Boolean</type><text>Y</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value> </condition>
+    </compare>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>384</xloc>
+      <yloc>192</yloc>
+      <draw>Y</draw>
+    </GUI>
+    </step>
+
+  <step>
+    <name>Kurs Event output</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>simtrade2_staging</connection>
+    <schema/>
+    <table>log_kursevent</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+        <field>
+          <column_name>zeitstempel</column_name>
+          <stream_name>zeit</stream_name>
+        </field>
+        <field>
+          <column_name>eventtyp</column_name>
+          <stream_name>typ</stream_name>
+        </field>
+        <field>
+          <column_name>id_produkt</column_name>
+          <stream_name>a3</stream_name>
+        </field>
+        <field>
+          <column_name>kurs</column_name>
+          <stream_name>a4</stream_name>
+        </field>
+    </fields>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>352</xloc>
+      <yloc>432</yloc>
+      <draw>Y</draw>
+    </GUI>
+    </step>
+
+  <step>
+    <name>Produkte output</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>simtrade2_staging</connection>
+    <schema/>
+    <table>log_produkte</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+        <field>
+          <column_name>id_produkt</column_name>
+          <stream_name>a3</stream_name>
+        </field>
+        <field>
+          <column_name>produktname</column_name>
+          <stream_name>a4</stream_name>
+        </field>
+        <field>
+          <column_name>produktgruppe</column_name>
+          <stream_name>gruppe</stream_name>
+        </field>
+    </fields>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>496</xloc>
+      <yloc>576</yloc>
+      <draw>Y</draw>
+    </GUI>
+    </step>
+
+  <step>
+    <name>Set field value to a constant</name>
+    <type>SetValueConstant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+   <usevar>N</usevar>
     <fields>
       <field>
-        <name>MAX&#x28;lastend&#x29;</name>
-        <value>1900-01-01 00&#x3a;00&#x3a;01</value>
+        <name>a3</name>
+        <value/>
         <mask>yyyy-MM-dd HH&#x3a;mm&#x3a;ss</mask>
         <set_empty_string>N</set_empty_string>
         </field>
@@ -781,31 +896,157 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>560</xloc>
-      <yloc>320</yloc>
+      <xloc>112</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
     </step>
 
   <step>
-    <name>Read Last Exec Time</name>
-    <type>TableInput</type>
+    <name>Split Fields</name>
+    <type>FieldSplitter</type>
     <description/>
-    <distribute>N</distribute>
+    <distribute>Y</distribute>
     <custom_distribution/>
     <copies>1</copies>
     <partitioning>
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>log_db</connection>
-    <sql>SELECT&#xd;&#xa;  MAX&#x28;lastend&#x29;&#xd;&#xa;FROM log&#xd;&#xa;WHERE transfm &#x3d; &#x3f;&#xd;&#xa;And system &#x3d; &#x27;&#x24;&#x7b;system&#x7d;&#x27;</sql>
-    <limit>0</limit>
-    <lookup>Get Transformation Name</lookup>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>Y</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-    <cluster_schema/>
+   <splitfield>logzeile</splitfield>
+   <delimiter>,</delimiter>
+   <enclosure/>
+    <fields>      <field>        <name>zeit</name>
+        <id/>
+        <idrem>N</idrem>
+        <type>String</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <currency/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>      <field>        <name>typ</name>
+        <id/>
+        <idrem>N</idrem>
+        <type>String</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <currency/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>      <field>        <name>a3</name>
+        <id/>
+        <idrem>N</idrem>
+        <type>String</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <currency/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>      <field>        <name>a4</name>
+        <id/>
+        <idrem>N</idrem>
+        <type>String</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <currency/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>      <field>        <name>a5</name>
+        <id/>
+        <idrem>N</idrem>
+        <type>String</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <currency/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>      <field>        <name>a6</name>
+        <id/>
+        <idrem>N</idrem>
+        <type>String</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <currency/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>      <field>        <name>a7</name>
+        <id/>
+        <idrem>N</idrem>
+        <type>String</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <currency/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>      <field>        <name>a8</name>
+        <id/>
+        <idrem>N</idrem>
+        <type>String</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <currency/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>      <field>        <name>a9</name>
+        <id/>
+        <idrem>N</idrem>
+        <type>String</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <currency/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>      <field>        <name>a10</name>
+        <id/>
+        <idrem>N</idrem>
+        <type>String</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <currency/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>    </fields>    <cluster_schema/>
     <remotesteps>
       <input>
       </input>
@@ -813,14 +1054,54 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>560</xloc>
-      <yloc>176</yloc>
+      <xloc>512</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
     </step>
 
   <step>
-    <name>Table input simulation</name>
+    <name>Switch &#x2f; Case</name>
+    <type>SwitchCase</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+<fieldname>typ</fieldname>
+<use_contains>N</use_contains>
+<case_value_type>String</case_value_type>
+<case_value_format/>
+<case_value_decimal/>
+<case_value_group/>
+<default_target_step/>
+<cases><case><value>U</value>
+<target_step>User Event output</target_step>
+</case><case><value>P</value>
+<target_step>Add Produktgruppe</target_step>
+</case><case><value>T</value>
+<target_step>Kurs Event output</target_step>
+</case><case><value>A</value>
+<target_step>Set field value to a constant</target_step>
+</case></cases>    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>352</xloc>
+      <yloc>288</yloc>
+      <draw>Y</draw>
+    </GUI>
+    </step>
+
+  <step>
+    <name>Table input</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -830,12 +1111,12 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>simtrade2</connection>
-    <sql>SELECT&#xd;&#xa;  &#x2a;&#xd;&#xa;FROM simulation&#xd;&#xa;where lastupdate &#x3e; &#x3f;&#x3b;</sql>
+    <connection>simtrade2_staging</connection>
+    <sql>SELECT logfile FROM simulation</sql>
     <limit>0</limit>
-    <lookup>If lastend is null </lookup>
+    <lookup/>
     <execute_each_row>N</execute_each_row>
-    <variables_active>Y</variables_active>
+    <variables_active>N</variables_active>
     <lazy_conversion_active>N</lazy_conversion_active>
     <cluster_schema/>
     <remotesteps>
@@ -845,17 +1126,121 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>560</xloc>
-      <yloc>448</yloc>
+      <xloc>160</xloc>
+      <yloc>112</yloc>
       <draw>Y</draw>
     </GUI>
     </step>
 
   <step>
-    <name>Table output</name>
+    <name>Text file input</name>
+    <type>TextFileInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <accept_filenames>Y</accept_filenames>
+    <passing_through_fields>N</passing_through_fields>
+    <accept_field>path</accept_field>
+    <accept_stepname>Filter rows</accept_stepname>
+    <separator>&#x3b;</separator>
+    <enclosure>&#x22;</enclosure>
+    <enclosure_breaks>N</enclosure_breaks>
+    <escapechar/>
+    <header>N</header>
+    <nr_headerlines>1</nr_headerlines>
+    <footer>N</footer>
+    <nr_footerlines>1</nr_footerlines>
+    <line_wrapped>N</line_wrapped>
+    <nr_wraps>1</nr_wraps>
+    <layout_paged>N</layout_paged>
+    <nr_lines_per_page>80</nr_lines_per_page>
+    <nr_lines_doc_header>0</nr_lines_doc_header>
+    <noempty>Y</noempty>
+    <include>N</include>
+    <include_field/>
+    <rownum>N</rownum>
+    <rownumByFile>N</rownumByFile>
+    <rownum_field/>
+    <format>mixed</format>
+    <encoding/>
+    <add_to_result_filenames>Y</add_to_result_filenames>
+    <file>
+      <name/>
+      <filemask/>
+      <exclude_filemask/>
+      <file_required>N</file_required>
+      <include_subfolders>N</include_subfolders>
+      <type>CSV</type>
+      <compression>None</compression>
+    </file>
+    <filters>
+    </filters>
+    <fields>
+      <field>
+        <name>logzeile</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+    </fields>
+    <limit>0</limit>
+    <error_ignored>N</error_ignored>
+    <skip_bad_files>N</skip_bad_files>
+    <file_error_field/>
+    <file_error_message_field/>
+    <error_line_skipped>N</error_line_skipped>
+    <error_count_field/>
+    <error_fields_field/>
+    <error_text_field/>
+    <bad_line_files_destination_directory/>
+    <bad_line_files_extension>warning</bad_line_files_extension>
+    <error_line_files_destination_directory/>
+    <error_line_files_extension>error</error_line_files_extension>
+    <line_number_files_destination_directory/>
+    <line_number_files_extension>line</line_number_files_extension>
+    <date_format_lenient>Y</date_format_lenient>
+    <date_format_locale>de_DE</date_format_locale>
+    <shortFileFieldName/>
+    <pathFieldName/>
+    <hiddenFieldName/>
+    <lastModificationTimeFieldName/>
+    <uriNameFieldName/>
+    <rootUriNameFieldName/>
+    <extensionFieldName/>
+    <sizeFieldName/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>512</xloc>
+      <yloc>192</yloc>
+      <draw>Y</draw>
+    </GUI>
+    </step>
+
+  <step>
+    <name>User Event output</name>
     <type>TableOutput</type>
     <description/>
-    <distribute>N</distribute>
+    <distribute>Y</distribute>
     <custom_distribution/>
     <copies>1</copies>
     <partitioning>
@@ -864,7 +1249,7 @@
     </partitioning>
     <connection>simtrade2_staging</connection>
     <schema/>
-    <table>simulation</table>
+    <table>log_userevent</table>
     <commit>1000</commit>
     <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
@@ -881,32 +1266,32 @@
     <return_field/>
     <fields>
         <field>
-          <column_name>id_simulation</column_name>
-          <stream_name>id_simulation</stream_name>
+          <column_name>zeitstempel</column_name>
+          <stream_name>zeit</stream_name>
         </field>
         <field>
-          <column_name>name</column_name>
-          <stream_name>name</stream_name>
+          <column_name>eventtyp</column_name>
+          <stream_name>typ</stream_name>
         </field>
         <field>
-          <column_name>startat</column_name>
-          <stream_name>startat</stream_name>
+          <column_name>id_user</column_name>
+          <stream_name>a3</stream_name>
         </field>
         <field>
-          <column_name>endat</column_name>
-          <stream_name>endat</stream_name>
+          <column_name>bestand_produkt1</column_name>
+          <stream_name>a6</stream_name>
         </field>
         <field>
-          <column_name>logfile</column_name>
-          <stream_name>logfile</stream_name>
+          <column_name>bestand_produkt2</column_name>
+          <stream_name>a7</stream_name>
         </field>
         <field>
-          <column_name>lastupdate</column_name>
-          <stream_name>lastupdate</stream_name>
+          <column_name>bestand_produkt3</column_name>
+          <stream_name>a8</stream_name>
         </field>
         <field>
-          <column_name>system</column_name>
-          <stream_name>system</stream_name>
+          <column_name>bestand_produkt4</column_name>
+          <stream_name>a9</stream_name>
         </field>
     </fields>
     <cluster_schema/>
@@ -917,15 +1302,15 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>912</xloc>
-      <yloc>448</yloc>
+      <xloc>224</xloc>
+      <yloc>432</yloc>
       <draw>Y</draw>
     </GUI>
     </step>
 
   <step>
-    <name>Table output 2</name>
-    <type>TableOutput</type>
+    <name>Value Mapper</name>
+    <type>ValueMapper</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -934,36 +1319,10 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>log_db</connection>
-    <schema/>
-    <table>log</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
+    <field_to_use>a5</field_to_use>
+    <target_field>start_zeitstempel</target_field>
+    <non_match_default/>
     <fields>
-        <field>
-          <column_name>system</column_name>
-          <stream_name>system_1</stream_name>
-        </field>
-        <field>
-          <column_name>lastend</column_name>
-          <stream_name>lastrun</stream_name>
-        </field>
-        <field>
-          <column_name>transfm</column_name>
-          <stream_name>transfm</stream_name>
-        </field>
     </fields>
     <cluster_schema/>
     <remotesteps>
@@ -973,15 +1332,15 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1104</xloc>
-      <yloc>160</yloc>
+      <xloc>112</xloc>
+      <yloc>384</yloc>
       <draw>Y</draw>
     </GUI>
     </step>
 
   <step>
-    <name>Table output 3</name>
-    <type>TableOutput</type>
+    <name>Concat Fields</name>
+    <type>ConcatFields</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -990,33 +1349,68 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>log_db</connection>
-    <schema/>
-    <table>surrogate_simulation</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
+    <separator>&#x5c;</separator>
+    <enclosure/>
+    <enclosure_forced>N</enclosure_forced>
+    <enclosure_fix_disabled>N</enclosure_fix_disabled>
+    <header>N</header>
+    <footer>N</footer>
+    <format>DOS</format>
+    <compression>None</compression>
+    <encoding/>
+    <endedLine/>
+    <fileNameInField>N</fileNameInField>
+    <fileNameField/>
+    <create_parent_folder>Y</create_parent_folder>
+    <file>
+      <name>file</name>
+      <is_command>N</is_command>
+      <servlet_output>N</servlet_output>
+      <do_not_open_new_file_init>N</do_not_open_new_file_init>
+      <extention>txt</extention>
+      <append>N</append>
+      <split>N</split>
+      <haspartno>N</haspartno>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <SpecifyFormat>N</SpecifyFormat>
+      <date_time_format/>
+      <add_to_result_filenames>Y</add_to_result_filenames>
+      <pad>N</pad>
+      <fast_dump>N</fast_dump>
+      <splitevery>0</splitevery>
+    </file>
     <fields>
-        <field>
-          <column_name>bkey</column_name>
-          <stream_name>id_simulation</stream_name>
-        </field>
-        <field>
-          <column_name>sys</column_name>
-          <stream_name>system</stream_name>
-        </field>
+      <field>
+        <name>logfile</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>45</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>path</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
     </fields>
+    <ConcatFields>
+<targetFieldName>logaddresse</targetFieldName>
+<targetFieldLength>0</targetFieldLength>
+<removeSelectedFields>N</removeSelectedFields>
+    </ConcatFields>
     <cluster_schema/>
     <remotesteps>
       <input>
@@ -1025,8 +1419,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1056</xloc>
-      <yloc>448</yloc>
+      <xloc>448</xloc>
+      <yloc>112</yloc>
       <draw>Y</draw>
     </GUI>
     </step>
