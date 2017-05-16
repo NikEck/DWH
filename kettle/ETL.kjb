@@ -8,7 +8,7 @@
   <created_user>-</created_user>
   <created_date>2016&#x2f;11&#x2f;02 09&#x3a;43&#x3a;12.760</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2017&#x2f;05&#x2f;03 14&#x3a;24&#x3a;10.545</modified_date>
+  <modified_date>2017&#x2f;05&#x2f;09 15&#x3a;43&#x3a;28.525</modified_date>
     <parameters>
       <parameter>
         <name>system</name>
@@ -22,6 +22,60 @@
     <type>MYSQL</type>
     <access>Native</access>
     <database>log_db</database>
+    <port>3306</port>
+    <username>simtrade</username>
+    <password>Encrypted 2be98afc86aa7f2e4b810a364cc93abdf</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>3306</attribute></attribute>
+      <attribute><code>PRESERVE_RESERVED_WORD_CASE</code><attribute>Y</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>SUPPORTS_TIMESTAMP_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>simtrade2_cube</name>
+    <server>localhost</server>
+    <type>MYSQL</type>
+    <access>Native</access>
+    <database>simtrade2_cube</database>
+    <port>3306</port>
+    <username>simtrade</username>
+    <password>Encrypted 2be98afc86aa7f2e4b810a364cc93abdf</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>3306</attribute></attribute>
+      <attribute><code>PRESERVE_RESERVED_WORD_CASE</code><attribute>Y</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>SUPPORTS_TIMESTAMP_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>simtrade2_staging</name>
+    <server>localhost</server>
+    <type>MYSQL</type>
+    <access>Native</access>
+    <database>simtrade2_staging</database>
     <port>3306</port>
     <username>simtrade</username>
     <password>Encrypted 2be98afc86aa7f2e4b810a364cc93abdf</password>
@@ -445,7 +499,7 @@
       <yloc>176</yloc>
     </entry>
     <entry>
-      <name>Truncate tables</name>
+      <name>Truncate Log_DB</name>
       <description/>
       <type>TRUNCATE_TABLES</type>
       <connection>log_db</connection>
@@ -471,8 +525,68 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>768</xloc>
-      <yloc>192</yloc>
+      <xloc>816</xloc>
+      <yloc>224</yloc>
+    </entry>
+    <entry>
+      <name>Truncate Cube</name>
+      <description/>
+      <type>TRUNCATE_TABLES</type>
+      <connection>simtrade2_cube</connection>
+      <arg_from_previous>N</arg_from_previous>
+      <fields>
+        <field>
+          <name>dim_simulation</name>
+          <schemaname/>
+        </field>
+        <field>
+          <name>dim_participation</name>
+          <schemaname/>
+        </field>
+        <field>
+          <name>dim_user</name>
+          <schemaname/>
+        </field>
+        <field>
+          <name>fac_trades</name>
+          <schemaname/>
+        </field>
+        <field>
+          <name>fac_events</name>
+          <schemaname/>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>784</xloc>
+      <yloc>128</yloc>
+    </entry>
+    <entry>
+      <name>Truncate staging</name>
+      <description/>
+      <type>TRUNCATE_TABLES</type>
+      <connection>simtrade2_staging</connection>
+      <arg_from_previous>N</arg_from_previous>
+      <fields>
+        <field>
+          <name>participation</name>
+          <schemaname/>
+        </field>
+        <field>
+          <name>simulation</name>
+          <schemaname/>
+        </field>
+        <field>
+          <name>user</name>
+          <schemaname/>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>912</xloc>
+      <yloc>224</yloc>
     </entry>
   </entries>
   <hops>
@@ -512,11 +626,29 @@
       <evaluation>Y</evaluation>
       <unconditional>Y</unconditional>
     </hop>
+    <hop>
+      <from>Truncate staging</from>
+      <to>Truncate Log_DB</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>Truncate Log_DB</from>
+      <to>Truncate Cube</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
   </hops>
   <notepads>
     <notepad>
       <note>Folgende Datenbanken m&#xfc;ssen existieren&#x3a;&#xa;	- simtrade2&#xa;	- simtrade2_staging&#xa;	- simtrade2_cube&#xa;Folgender Datenbankbenutzer sollte vollen Zugriff auf diese Datenbanken haben&#x3a;&#xa;	Username&#x3a; 	simtrade&#xa;	Passwort&#x3a; 	simtrade</note>
-      <xloc>112</xloc>
+      <xloc>96</xloc>
       <yloc>256</yloc>
       <width>570</width>
       <heigth>129</heigth>

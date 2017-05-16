@@ -1,6 +1,6 @@
 <transformation>
   <info>
-    <name>Load_Simulation_Dim</name>
+    <name>Load_trade_fact</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -8,11 +8,6 @@
     <trans_status>0</trans_status>
     <directory>&#x2f;Load</directory>
     <parameters>
-      <parameter>
-        <name>system</name>
-        <default_value/>
-        <description/>
-      </parameter>
     </parameters>
     <log>
       <trans-log-table>
@@ -432,41 +427,14 @@
     <clusterschemas>
     </clusterschemas>
     <created_user>-</created_user>
-    <created_date>2016&#x2f;11&#x2f;07 11&#x3a;33&#x3a;30.818</created_date>
+    <created_date>2017&#x2f;05&#x2f;09 15&#x3a;26&#x3a;44.493</created_date>
     <modified_user>-</modified_user>
-    <modified_date>2017&#x2f;05&#x2f;09 13&#x3a;17&#x3a;11.527</modified_date>
-    <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA&#x3d;</key_for_session_key>
+    <modified_date>2017&#x2f;05&#x2f;09 15&#x3a;35&#x3a;34.351</modified_date>
+    <key_for_session_key/>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
   </notepads>
-  <connection>
-    <name>log_db</name>
-    <server>localhost</server>
-    <type>MYSQL</type>
-    <access>Native</access>
-    <database>log_db</database>
-    <port>3306</port>
-    <username>simtrade</username>
-    <password>Encrypted 2be98afc86aa7f2e4b810a364cc93abdf</password>
-    <servername/>
-    <data_tablespace/>
-    <index_tablespace/>
-    <attributes>
-      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
-      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
-      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
-      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
-      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
-      <attribute><code>PORT_NUMBER</code><attribute>3306</attribute></attribute>
-      <attribute><code>PRESERVE_RESERVED_WORD_CASE</code><attribute>Y</attribute></attribute>
-      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
-      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
-      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>Y</attribute></attribute>
-      <attribute><code>SUPPORTS_TIMESTAMP_DATA_TYPE</code><attribute>Y</attribute></attribute>
-      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
-    </attributes>
-  </connection>
   <connection>
     <name>simtrade2_cube</name>
     <server>localhost</server>
@@ -523,28 +491,13 @@
   </connection>
   <order>
     <hop>
-      <from>Get Surrogates</from>
-      <to>Merge Join</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Get Simulation From Staging</from>
-      <to>Merge Join</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Merge Join</from>
-      <to>Select values</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Select values</from>
-      <to>Load Simulation in Dimension</to>
+      <from>Table input</from>
+      <to>Table output</to>
       <enabled>Y</enabled>
     </hop>
   </order>
   <step>
-    <name>Get Simulation From Staging</name>
+    <name>Table input</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -555,7 +508,7 @@
       <schema_name/>
     </partitioning>
     <connection>simtrade2_staging</connection>
-    <sql>SELECT&#xa;  id_simulation&#xa;, &#x60;name&#x60;&#xd;&#xa;, system&#xa;FROM simulation&#xa;</sql>
+    <sql>SELECT product_id,typ,sum&#x28;volumen&#x29; FROM trade_log where typ&#x3d; &#x22;S&#x22; or typ &#x3d; &#x22;B&#x22;&#xd;&#xa;group by product_id,typ</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -569,46 +522,14 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>128</xloc>
-      <yloc>144</yloc>
+      <xloc>160</xloc>
+      <yloc>128</yloc>
       <draw>Y</draw>
     </GUI>
     </step>
 
   <step>
-    <name>Get Surrogates</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <connection>log_db</connection>
-    <sql>SELECT&#xa;  bkey&#xd;&#xa;, sys&#xd;&#xa;,skey&#xa;FROM surrogate_simulation&#xa;&#xd;&#xa;</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>128</xloc>
-      <yloc>240</yloc>
-      <draw>Y</draw>
-    </GUI>
-    </step>
-
-  <step>
-    <name>Load Simulation in Dimension</name>
+    <name>Table output</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -620,7 +541,7 @@
     </partitioning>
     <connection>simtrade2_cube</connection>
     <schema/>
-    <table>dim_simulation</table>
+    <table>fac_trades</table>
     <commit>1000</commit>
     <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
@@ -637,12 +558,16 @@
     <return_field/>
     <fields>
         <field>
-          <column_name>simulation_name</column_name>
-          <stream_name>name</stream_name>
+          <column_name>product_id</column_name>
+          <stream_name>product_id</stream_name>
         </field>
         <field>
-          <column_name>skey</column_name>
-          <stream_name>skey</stream_name>
+          <column_name>typ</column_name>
+          <stream_name>typ</stream_name>
+        </field>
+        <field>
+          <column_name>amount</column_name>
+          <stream_name>sum&#x28;volumen&#x29;</stream_name>
         </field>
     </fields>
     <cluster_schema/>
@@ -653,74 +578,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>576</xloc>
-      <yloc>192</yloc>
-      <draw>Y</draw>
-    </GUI>
-    </step>
-
-  <step>
-    <name>Merge Join</name>
-    <type>MergeJoin</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-<join_type>INNER</join_type>
-<step1>Get Simulation From Staging</step1>
-<step2>Get Surrogates</step2>
-    <keys_1>
-      <key>id_simulation</key>
-      <key>system</key>
-    </keys_1>
-    <keys_2>
-      <key>bkey</key>
-      <key>sys</key>
-    </keys_2>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>256</xloc>
-      <yloc>192</yloc>
-      <draw>Y</draw>
-    </GUI>
-    </step>
-
-  <step>
-    <name>Select values</name>
-    <type>SelectValues</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>      <field>        <name>name</name>
-        <rename/>
-      </field>      <field>        <name>skey</name>
-        <rename/>
-      </field>        <select_unspecified>N</select_unspecified>
-    </fields>    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>384</xloc>
-      <yloc>192</yloc>
+      <xloc>288</xloc>
+      <yloc>128</yloc>
       <draw>Y</draw>
     </GUI>
     </step>
