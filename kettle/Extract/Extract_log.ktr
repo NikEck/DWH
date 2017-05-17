@@ -429,12 +429,39 @@
     <created_user>-</created_user>
     <created_date>2017&#x2f;05&#x2f;02 19&#x3a;44&#x3a;53.622</created_date>
     <modified_user>-</modified_user>
-    <modified_date>2017&#x2f;05&#x2f;11 08&#x3a;37&#x3a;12.050</modified_date>
+    <modified_date>2017&#x2f;05&#x2f;16 12&#x3a;49&#x3a;43.115</modified_date>
     <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA&#x3d;</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
   </notepads>
+  <connection>
+    <name>log_db</name>
+    <server>localhost</server>
+    <type>MYSQL</type>
+    <access>Native</access>
+    <database>log_db</database>
+    <port>3306</port>
+    <username>simtrade</username>
+    <password>Encrypted 2be98afc86aa7f2e4b810a364cc93abdf</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>3306</attribute></attribute>
+      <attribute><code>PRESERVE_RESERVED_WORD_CASE</code><attribute>Y</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>SUPPORTS_TIMESTAMP_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
   <connection>
     <name>simtrade2_staging</name>
     <server>localhost</server>
@@ -548,6 +575,21 @@
       <to>Table output 3 2</to>
       <enabled>Y</enabled>
     </hop>
+    <hop>
+      <from>Get Transformation Name</from>
+      <to>Read Last Exec Time</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Read Last Exec Time</from>
+      <to>If lastend is null </to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>If lastend is null </from>
+      <to>Table input</to>
+      <enabled>Y</enabled>
+    </hop>
   </order>
   <step>
     <name>Add constants</name>
@@ -592,7 +634,7 @@
     <name>Concat Fields</name>
     <type>ConcatFields</type>
     <description/>
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <custom_distribution/>
     <copies>1</copies>
     <partitioning>
@@ -741,7 +783,7 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-<send_true_to>Text file input</send_true_to>
+<send_true_to>Select values 3</send_true_to>
 <send_false_to>Dummy &#x28;do nothing&#x29;</send_false_to>
     <compare>
 <condition>
@@ -1087,7 +1129,7 @@
     <name>Table input</name>
     <type>TableInput</type>
     <description/>
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <custom_distribution/>
     <copies>1</copies>
     <partitioning>
@@ -1095,9 +1137,9 @@
       <schema_name/>
     </partitioning>
     <connection>simtrade2_staging</connection>
-    <sql>SELECT logfile FROM simulation</sql>
+    <sql>SELECT logfile,id_Simulation FROM simulation where lastupdate &#x3e; &#x3f;</sql>
     <limit>0</limit>
-    <lookup/>
+    <lookup>If lastend is null </lookup>
     <execute_each_row>N</execute_each_row>
     <variables_active>N</variables_active>
     <lazy_conversion_active>N</lazy_conversion_active>
@@ -1431,7 +1473,7 @@
     <name>Text file input</name>
     <type>TextFileInput</type>
     <description/>
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <custom_distribution/>
     <copies>1</copies>
     <partitioning>
@@ -1557,6 +1599,109 @@
     <GUI>
       <xloc>240</xloc>
       <yloc>336</yloc>
+      <draw>Y</draw>
+    </GUI>
+    </step>
+
+  <step>
+    <name>Get Transformation Name</name>
+    <type>SystemInfo</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>transfm</name>
+        <type>transformation name</type>
+        </field>
+      </fields>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>64</xloc>
+      <yloc>288</yloc>
+      <draw>Y</draw>
+    </GUI>
+    </step>
+
+  <step>
+    <name>If lastend is null </name>
+    <type>IfNull</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+      <replaceAllByValue/>
+      <replaceAllMask/>
+      <selectFields>Y</selectFields>
+      <selectValuesType>N</selectValuesType>
+      <setEmptyStringAll>N</setEmptyStringAll>
+    <valuetypes>
+      </valuetypes>
+    <fields>
+      <field>
+        <name>MAX&#x28;lastend&#x29;</name>
+        <value>1900-01-01 00&#x3a;00&#x3a;01</value>
+        <mask>yyyy-MM-dd HH&#x3a;mm&#x3a;ss</mask>
+        <set_empty_string>N</set_empty_string>
+        </field>
+      </fields>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>160</xloc>
+      <yloc>176</yloc>
+      <draw>Y</draw>
+    </GUI>
+    </step>
+
+  <step>
+    <name>Read Last Exec Time</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>log_db</connection>
+    <sql>SELECT&#xd;&#xa;  MAX&#x28;lastend&#x29;&#xd;&#xa;FROM log&#xd;&#xa;WHERE transfm &#x3d; &#x3f;&#xd;&#xa;And system &#x3d; &#x27;&#x24;&#x7b;system&#x7d;&#x27;</sql>
+    <limit>0</limit>
+    <lookup>Get Transformation Name</lookup>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>64</xloc>
+      <yloc>176</yloc>
       <draw>Y</draw>
     </GUI>
     </step>
