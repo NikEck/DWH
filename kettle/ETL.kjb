@@ -8,7 +8,7 @@
   <created_user>-</created_user>
   <created_date>2016&#x2f;11&#x2f;02 09&#x3a;43&#x3a;12.760</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2017&#x2f;05&#x2f;17 12&#x3a;03&#x3a;36.512</modified_date>
+  <modified_date>2017&#x2f;05&#x2f;17 12&#x3a;19&#x3a;24.256</modified_date>
     <parameters>
       <parameter>
         <name>system</name>
@@ -397,7 +397,10 @@
       <create_parent_folder>N</create_parent_folder>
       <pass_export>N</pass_export>
       <parameters>        <pass_all_parameters>Y</pass_all_parameters>
-      </parameters>      <set_append_logfile>N</set_append_logfile>
+            <parameter>            <name>system</name>
+            <stream_name/>
+            <value/>
+            </parameter>      </parameters>      <set_append_logfile>N</set_append_logfile>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
@@ -525,8 +528,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>816</xloc>
-      <yloc>224</yloc>
+      <xloc>784</xloc>
+      <yloc>144</yloc>
     </entry>
     <entry>
       <name>Truncate Cube</name>
@@ -563,8 +566,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>128</yloc>
+      <xloc>736</xloc>
+      <yloc>48</yloc>
     </entry>
     <entry>
       <name>Truncate staging</name>
@@ -589,8 +592,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>912</xloc>
-      <yloc>224</yloc>
+      <xloc>880</xloc>
+      <yloc>144</yloc>
     </entry>
   </entries>
   <hops>
